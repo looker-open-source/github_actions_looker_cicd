@@ -1,0 +1,64 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Looker Validation Suite
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install looker_sdk
+        pip install pandas
+        pip install argparse
+        pip install configparser
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    # Run Lookml Validation and check if dev branch has any errors. 
+    - name: Run LookML validator
+      env:
+        LOOKERSDK_API_VERSION: ${{ secrets.LOOKERSDK_API_VERSION }}
+        LOOKERSDK_BASE_URL: ${{ secrets.LOOKERSDK_BASE_URL }}
+        LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
+        LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
+      run: |
+        cd .github
+        echo ${{ github.head_ref }}
+        echo ${{ github.event.push.ref }}
+        python validate.py --project eric_the_redshift --dev True --branch ${{ github.head_ref }}
+    # Run Content Validation and check if new branch has more errors than prod
+    - name: Run Content validator
+      env:
+        LOOKERSDK_API_VERSION: ${{ secrets.LOOKERSDK_API_VERSION }}
+        LOOKERSDK_BASE_URL: ${{ secrets.LOOKERSDK_BASE_URL }}
+        LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
+        LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
+      run: |
+        cd .github
+        # python content_validate.py --project eric_the_redshift --branch ${{ github.head_ref }}
+  # Run LookML Tests
+    - name: Run LookML Tests
+      env:
+        LOOKERSDK_API_VERSION: ${{ secrets.LOOKERSDK_API_VERSION }}
+        LOOKERSDK_BASE_URL: ${{ secrets.LOOKERSDK_BASE_URL }}
+        LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
+        LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
+      run: |
+        cd .github
+        python lookml_tests.py --project eric_the_redshift --branch ${{ github.head_ref }}
+ 
+
+ 
