@@ -2,8 +2,9 @@
 This doc walks through the process of creating a Github Action. The action will run on push events and pull requests to the main branch. The action will run three scripts. This workflow is a key tenant in promoting code quality and ensuring that your Looker Data team or analysts can focus on creating new features for business users rather than devoting a large portion of time to resolving/fixing broken content. 
 
 The first script will check if there are any Lookml validation errors or warnings. 
-The second script will check if the branch the pull request originated from causes an increase in broken content relative to production. This is currently commented out. Depending on the size of your instance and the number of pieces of broken content this can take a while to load. The first and third script both run in under 50 seconds generally. 
-The third script will run all the LookML tests in the project and fail if any of those tests do not pass. 
+The second script will check if the branch the pull request originated from causes an increase in broken content relative to production. This is currently commented out. Depending on the size of your instance and the number of pieces of broken content this can take a while to load. The third script will run all the LookML tests in the project and fail if any of those tests do not pass. 
+The first and third script both run in under 50 seconds generally. 
+
 
 ## Steps to enable the Github Action. 
 
@@ -19,7 +20,7 @@ The third script will run all the LookML tests in the project and fail if any of
 7. You can customize the events the action is triggered on. For full reference, see this site:
 https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
 Or feel free to use this template. 
-8. If you use the template, be sure to change the project name arg under the run categories to match your project name. 
+8. **If you use the template, be sure to change the project name arg under the run categories to match your project name.**
 9. Save these changes. The action will try to run, but fail. That is OK!
 10. Create a service account in the Looker UI. Make this account either a developer or admin. Then, go to admin → users and generate a client_id and client_secret. 
 11. Next click the settings tab in the github repo and scroll down to secrets. 
