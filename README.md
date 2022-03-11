@@ -69,6 +69,12 @@ If you use content_validate.py, edit the code to use your own base url on line 5
 
 17. Click details to see the specific reason why they failed. 
 
+## Suggested Workflow
+To optimize development efficiency and to maximize the value of your data team, we want to minimize the amount of time working on legacy content or even broken content. The Github action will help automate and add secondary checks to ensure quality. The pull request template allows for tracking and thorough review on the developer’s behalf. The checklist should make the developer critically evaluate his/her/their code. Even though it may pass all the validation checks, what problem does it solve? Is the field easily understood and accessible to the business users? Could it be written in a more efficient manner? These are the questions one must ask to ensure a streamlined data model and to optimize Looker as a data product. 
+
+We would suggest requiring other team members review developer’s pull requests to ensure another pair of eyes reviews the code. We would also want the developer to complete a checklist similar to the one listed in the example pull_request_template.md file. We would also suggest adding LookML tests whenever possible. Some key tests are to check if a primary key is truly unique and to make sure no values of the primary key are null. Finally, we would suggest using the scripts in the repo to add another layer of validation and security. Feel free to customize the scripts or add your own. An extension of this workflow could add a validation script that checks fields for labels, descriptions, and potential column or row level security parameters such as access_filters or required_access_grants. 
+
+
 ## Summary
 Congratulations! You have successfully enabled a Github action and added an automation to ensure that your LookML developers adhere to best code practices. You can edit the scripts as needed. Currently, they fail based on a strict assertion statement. They look for any new broken content, any LookML warnings/errors, and any failed LookML tests. 
 
