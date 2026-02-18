@@ -34,11 +34,12 @@ jobs:
         LOOKERSDK_BASE_URL: ${{ secrets.LOOKERSDK_BASE_URL }}
         LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
         LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
+        GITHUB_EVENT_PUSH_REF: ${{ github.event.push.ref }}
       run: |
         cd .github
-        echo ${{ github.head_ref }}
-        echo ${{ github.event.push.ref }}
-        python validate.py --project eric_the_redshift --dev True --branch ${{ github.head_ref }}
+        echo ${GITHUB_HEAD_REF}
+        echo ${GITHUB_EVENT_PUSH_REF}
+        python validate.py --project eric_the_redshift --dev True --branch ${GITHUB_HEAD_REF}
     # Run Content Validation and check if new branch has more errors than prod
     - name: Run Content validator
       env:
@@ -48,7 +49,7 @@ jobs:
         LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
       run: |
         cd .github
-        # python content_validate.py --project eric_the_redshift --branch ${{ github.head_ref }}
+        # python content_validate.py --project eric_the_redshift --branch ${GITHUB_HEAD_REF}
   # Run LookML Tests
     - name: Run LookML Tests
       env:
@@ -58,7 +59,7 @@ jobs:
         LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
       run: |
         cd .github
-        python lookml_tests.py --project eric_the_redshift --branch ${{ github.head_ref }}
+        python lookml_tests.py --project eric_the_redshift --branch ${GITHUB_HEAD_REF}
  
 
  
